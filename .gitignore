@@ -1,3 +1,5 @@
 .idea
 bin
 build
+parser_example
+samples/a.in

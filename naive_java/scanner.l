@@ -60,7 +60,7 @@ id    [a-zA-Z][a-zA-Z_0-9]*
 "String[]" return yy::parser::make_STRING_PTR(loc);
 "System.out.print" return yy::parser::make_PRINT(loc);
 "-"        {
-              std::cout << loc.begin.line << " " << loc.end.line << std::endl;
+              //std::cout << loc.begin.line << " " << loc.end.line << std::endl;
               return yy::parser::make_MINUS  (loc);
            }
 "+"        return yy::parser::make_PLUS   (loc);
@@ -69,6 +69,18 @@ id    [a-zA-Z][a-zA-Z_0-9]*
 "("        return yy::parser::make_LPAREN (loc);
 ")"        return yy::parser::make_RPAREN (loc);
 "="        return yy::parser::make_ASSIGN (loc);
+
+"=="       return yy::parser::make_EQUAL         (loc);
+"!="       return yy::parser::make_NOT_EQUAL     (loc);
+">="       return yy::parser::make_GREATER_EQUAL (loc);
+"<="       return yy::parser::make_LESS_EQUAL    (loc);
+">"        return yy::parser::make_GREATER       (loc);
+"<"        return yy::parser::make_LESS          (loc);
+
+"&&"       return yy::parser::make_AND     (loc);
+"||"       return yy::parser::make_OR      (loc);
+"!"        return yy::parser::make_NOT     (loc);
+
 "{"        {
                 //std::cout << loc.begin.line << " " << loc.end.line << " Ohi! " << std::endl;
                 return yy::parser::make_CURLLPAREN (loc);
@@ -79,6 +91,11 @@ id    [a-zA-Z][a-zA-Z_0-9]*
 "bool"      return yy::parser::make_BOOLT     (loc);
 "String"      return yy::parser::make_STRINGT (loc);
 
+
+"if" return yy::parser::make_IF(loc);
+"else" return yy::parser::make_ELSE(loc);
+"while" return yy::parser::make_WHILE(loc);
+"for" return yy::parser::make_FOR(loc);
 
 "true" return make_BOOL("true", loc);
 "false" return make_BOOL("false", loc);
@@ -115,9 +132,26 @@ yy::parser::symbol_type make_BOOL(
   }
 }
 
+void replace_all(std::string &s, const std::string &from, const std::string &to) {
+    size_t pos = s.find(from);
+
+        while( pos != std::string::npos)
+        {
+            s.replace(pos, from.size(), to);
+            pos = s.find(from, pos + to.size());
+        }
+}
+
 yy::parser::symbol_type make_STRING(
   const std::string &s,
   const yy::parser::location_type& loc
 ) {
-  return yy::parser::make_STRING(s.substr(1, s.length() - 2), loc);
+  std::string result = s.substr(1, s.length() - 2);
+  replace_all(result, "\\n", "\n");
+  replace_all(result, "\\b", "\b");
+  replace_all(result, "\\t", "\t");
+  replace_all(result, "\\\'", "\\\'");
+  replace_all(result, "\\\"", "\\\"");
+  replace_all(result, "\\\\", "\\");
+  return yy::parser::make_STRING(result, loc);
 }

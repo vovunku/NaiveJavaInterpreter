@@ -2,4 +2,9 @@
 bin
 build
 parser_example
+cmake-build-debug
 samples/a.in
+naive_java/location.hh
+naive_java/parser.cpp
+naive_java/parser.hh
+naive_java/scanner.cpp

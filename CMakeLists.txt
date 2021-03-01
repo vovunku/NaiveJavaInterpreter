@@ -33,5 +33,6 @@ set(CMAKE_CXX_STANDARD 14)
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${Compilers_SOURCE_DIR}/bin)
 
-add_subdirectory(parser_example)
-add_subdirectory(naive_java)
+# add_subdirectory(parser_example)
+# add_subdirectory(naive_java)
+add_subdirectory(build_ast)
